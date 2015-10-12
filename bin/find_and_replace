@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+require 'optparse'
+
+options = {
+  yes: true
+}
+
+OptionParser.new do |opts|
+  opts.banner = 'Usage: find_and_replace [--yes] <match> <regex> <replace>'
+
+  opts.on('-y', '--yes', 'Apply changes to database') do |v|
+    options[:yes] = v
+  end
+end.parse!

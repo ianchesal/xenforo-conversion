@@ -6,6 +6,8 @@ Random utility scripts used for a vBulletin to Xenforo conversion.
 
 ## Configuration
 
+You should be using [RVM](https://rvm.io) to load the correct Ruby for this project. This has not been tested with system Ruby on any Linux system, only with the Ruby version listed in the `.ruby-version` file for this project.
+
 You need to add your own `.config/database.yml` file in order to use the utilities in this repository. I should look like this:
 
     ---
@@ -18,8 +20,8 @@ You need to add your own `.config/database.yml` file in order to use the utiliti
 
 Once that's done run:
 
-  bundle install
-  bundle exec rake test
+    bundle install
+    bundle exec rake test
 
 And if the tests pass you're ready to use the tools. You should prefix all your calls to the tools with `bundle exec`.
 

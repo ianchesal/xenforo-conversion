@@ -14,6 +14,16 @@ RSpec.describe Xenforo::Database, fakefs: true do
       expect(subject).to be_truthy
     end
 
+    it 'defaults to xenforo database type' do
+      write_fake_database_yml
+      expect(subject.type).to eq 'xenforo'
+    end
+
+    it 'can also be used for vbulletin connections' do
+      write_fake_database_yml
+      expect(Xenforo::Database.new(type: 'vbulletin')).to be_truthy
+    end
+
     it 'fails if database.yml cannot be found' do
       FileUtils.rm_f(File.join(File.dirname(__FILE__), '..', '..', '.config', 'database.yml'))
       expect { subject }.to raise_error(Errno::ENOENT)
@@ -23,8 +33,12 @@ RSpec.describe Xenforo::Database, fakefs: true do
       write_fake_database_yml({})
       expect { subject }.to raise_error(RuntimeError)
     end
-  end
 
+    it 'fails if database.yml is missing type section' do
+      write_fake_database_yml
+      expect { Xenforo::Database.new(type: 'unknown') }.to raise_error(RuntimeError)
+    end
+  end
   describe '#url' do
     it 'returns a connection URL' do
       expect(subject.url).to be_truthy

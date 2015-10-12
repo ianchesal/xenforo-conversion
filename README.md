@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/ianchesal/xenforo-conversion.svg?branch=master)](https://travis-ci.org/ianchesal/xenforo-conversion)
 
-Random utility scripts used for a vBulletin to Xenforo conversion.
+Tools used for a vBulletin to Xenforo conversion. Data transforms, data cleanup, etc.
 
 ## Configuration
 
@@ -11,12 +11,22 @@ You should be using [RVM](https://rvm.io) to load the correct Ruby for this proj
 You need to add your own `.config/database.yml` file in order to use the utilities in this repository. I should look like this:
 
     ---
-    host: <hostname|IP address>
-    port: <port>
-    username: <username>
-    password: <password>
-    type: (mysql|postgres)
-    database: <xenforo database name>
+    xenforo:
+      host: <hostname|IP address>
+      port: <port>
+      username: <username>
+      password: <password>
+      type: (mysql|postgres)
+      database: <xenforo database name>
+    vbulletin:
+      host: <hostname|IP address>
+      port: <port>
+      username: <username>
+      password: <password>
+      type: (mysql|postgres)
+      database: <vbulletin database name>
+
+The `vbulletin` section is optional and only required if you're going to be using tools from this toolkit that transform data from VBulletion to Xenforo.
 
 Once that's done run:
 

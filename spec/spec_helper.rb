@@ -14,12 +14,22 @@ end
 def write_fake_database_yml(userdata = nil)
   config_dir = File.join(File.dirname(__FILE__), '..', '.config')
   data = {
-    'host' => 'localhost',
-    'port' => 3306,
-    'username' => 'nobody',
-    'password' => 'password',
-    'type' => 'mysql',
-    'database' => 'xenforo'
+    'xenforo' => {
+      'host' => 'localhost',
+      'port' => 3306,
+      'username' => 'nobody',
+      'password' => 'password',
+      'type' => 'mysql',
+      'database' => 'xenforo'
+    },
+    'vbulletin' => {
+      'host' => 'localhost',
+      'port' => 3306,
+      'username' => 'nobody',
+      'password' => 'password',
+      'type' => 'mysql',
+      'database' => 'vbulletin'
+    }
   }
   data = userdata if userdata
   FileUtils.mkdir_p(config_dir)

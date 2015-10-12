@@ -4,11 +4,12 @@ require 'yaml'
 
 module Xenforo
   # Constructs a Sequel DB connection to your Xenforo database using
-  # .config/database.yml-based connection information.
+  # .config/database.yml-based connection information. Can also connect
+  # to VBulletin databases.
   class Database
-    attr_reader :settings, :logger
+    attr_reader :settings, :logger, :type
 
-    def initialize(logfile = nil)
+    def initialize(type: 'xenforo', logfile: nil)
       if logfile
         self.logger = Logger.new(logfile)
         logger.level = Logger::DEBUG
@@ -16,7 +17,7 @@ module Xenforo
         self.logger = Logger.new(STDOUT)
         logger.level = Logger::ERROR
       end
-      load_yaml
+      load_yaml(type)
     end
 
     def connect
@@ -54,17 +55,20 @@ module Xenforo
 
     private
 
-    attr_writer :settings, :logger
+    attr_writer :settings, :logger, :type
 
     def config_file
       File.join(File.dirname(__FILE__), '..', '..', '.config', 'database.yml')
     end
 
-    def load_yaml
-      self.settings = YAML.load(File.open(config_file))
+    def load_yaml(type)
+      data = YAML.load(File.open(config_file))
+      fail "Missing #{type} section in database.yml" unless data.key? type
       %w(host port username password type database).each do |setting|
-        fail "Missing database configuration setting #{setting}" unless settings.key? setting
+        fail "Missing database configuration setting #{setting}" unless data[type].key? setting
       end
+      self.type = type
+      self.settings = data[type]
     end
   end
 end

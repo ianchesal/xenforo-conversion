@@ -1,5 +1,7 @@
 # xenforo-conversion
 
+[![Build Status](https://travis-ci.org/ianchesal/xenforo-conversion.svg?branch=master)](https://travis-ci.org/ianchesal/xenforo-conversion)
+
 Random utility scripts used for a vBulletin to Xenforo conversion. It assumes MySQL is the database.
 
 ## Configuration

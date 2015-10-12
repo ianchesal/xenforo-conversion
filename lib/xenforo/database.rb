@@ -21,7 +21,7 @@ module Xenforo
     end
 
     def connect
-      Sequel.connect(adapter: dbtype, user: username, password: password, host: host, port: port, database: database_name, logger: logger)
+      @connect ||= Sequel.connect(adapter: dbtype, user: username, password: password, host: host, port: port, database: database_name, logger: logger)
     end
 
     def url

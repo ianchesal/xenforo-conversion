@@ -53,9 +53,19 @@ It uses [Ruby-style regular expression syntax](http://ruby-doc.org/core-2.2.0/Re
 
 Here's an example call that replaces vBulletin-style YouTube video embeds with the Xenforo 1.5.x style:
 
-    bundle exec bin/find_and_replace '[video' '#\[video=youtube;([^\]]+)\]([^\[]+)\[/video\]#siU' '[media=youtube]\1[/media]'
+    bundle exec bin/find_and_replace '[video' '\[video=youtube\S*?;(\S+?)\].*?\[\/video\]' '[media=youtube]\1[/media]'
 
-Note the use of single quotes to ensure that shell expansion and substitutions don't eat your regular expressions.
+That will find things like:
+
+    [video=youtube;t4KIAWNZ5tY]http://www.youtube.com/watch?v=t4KIAWNZ5tY[/video]
+    [video=youtube_share;RkkCDHmBAs8]http://youtu.be/RkkCDHmBAs8[/video]
+
+And turn them in to things like:
+
+    [media=youtube]t4KIAWNZ5tY[/media]
+    [media=youtube]RkkCDHmBAs8[/media]
+
+Note the use of single quotes to ensure that shell expansion and substitutions don't eat your regular expressions. You can see the regular expression in use in this example [here](http://rubular.com/r/PNHAYTa65L).
 
 Because this script runs across _all_ the content in your `xf_posts` table it can take a _long_ time to run.
 

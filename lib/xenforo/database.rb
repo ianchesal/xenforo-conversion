@@ -9,13 +9,12 @@ module Xenforo
   class Database
     attr_reader :settings, :logger, :type
 
-    def initialize(type: 'xenforo', logfile: nil)
-      if logfile
-        self.logger = Logger.new(logfile)
-        logger.level = Logger::DEBUG
+    def initialize(type: 'xenforo', logger: nil)
+      if logger
+        self.logger = logger
       else
         self.logger = Logger.new(STDOUT)
-        logger.level = Logger::ERROR
+        self.logger.level = Logger::ERROR
       end
       load_yaml(type)
     end

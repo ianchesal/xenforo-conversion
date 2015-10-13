@@ -1,10 +1,14 @@
 #!/usr/bin/env ruby
 require 'optparse'
+require_relative '../lib/xenforo/database'
+require_relative '../lib/xenforo/xlogger'
+
+start_time = Time.now
+logger = Xenforo::XLogger.get_logger __FILE__
 
 options = {
-  yes: true
+  yes: false
 }
-
 OptionParser.new do |opts|
   opts.banner = 'Usage: find_and_replace [--yes] <match> <regex> <replace>'
 
@@ -12,3 +16,44 @@ OptionParser.new do |opts|
     options[:yes] = v
   end
 end.parse!
+
+fail 'Missing required arguments <match> <regex> <replace>' if ARGV.count < 3
+
+match = ARGV[0]
+regex = ARGV[1]
+replace = ARGV[2]
+
+logger.info "match   = #{match}"
+logger.info "regex   = #{regex}"
+logger.info "replace = #{replace}"
+logger.info "dryrun  = #{!options[:yes]}"
+
+logger.info '***** DRY RUN!!! *****' unless options[:yes]
+
+DB = Xenforo::Database.new(
+  type: 'xenforo',
+  logger: logger
+).connect
+
+dataset = DB["SELECT post_id, message FROM xf_post WHERE message LIKE '%#{match}%'"]
+logger.info "Matched #{dataset.count} records"
+dataset.each do |row|
+  post_id = row[:post_id]
+  info_message  = "\n"
+  info_message += "Post ID: #{post_id}\n"
+  new_message = row[:message].gsub(/#{regex}/, replace)
+  info_message += '> ' + row[:message].split("\n").join("\n> ")
+  info_message += "\n--------------------\n"
+  info_message += '< ' + new_message.split("\n").join("\n< ")
+  info_message += "\n"
+  logger.info info_message
+  logger.info "Updating post #{post_id} with new message" if options[:yes]
+  # dataset.where('post_id = ?', post_id).update(message: new_message) if options[:yes]
+  # DB["UPDATE xf_post SET message = ? WHERE post_id = ?", new_message, row[:post_id]] if options[:yes]
+  break
+end
+
+end_time = Time.now
+logger.info '***** DRY RUN!!! *****' unless options[:yes]
+logger.info "Full find and replace took #{(end_time - start_time)} seconds"
+exit 0

@@ -35,7 +35,7 @@ DB = Xenforo::Database.new(
   logger: logger
 ).connect
 
-dataset = DB["SELECT post_id, message FROM xf_post WHERE message LIKE '%#{match}%'"]
+dataset = DB[:xf_post].select(:post_id, :message).where(Sequel.like(:message, "%#{match}%"))
 logger.info "Matched #{dataset.count} records"
 dataset.each do |row|
   post_id = row[:post_id]
@@ -48,9 +48,7 @@ dataset.each do |row|
   info_message += "\n"
   logger.info info_message
   logger.info "Updating post #{post_id} with new message" if options[:yes]
-  # dataset.where('post_id = ?', post_id).update(message: new_message) if options[:yes]
-  # DB["UPDATE xf_post SET message = ? WHERE post_id = ?", new_message, row[:post_id]] if options[:yes]
-  break
+  dataset.where('post_id = ?', post_id).update(message: new_message) if options[:yes]
 end
 
 end_time = Time.now

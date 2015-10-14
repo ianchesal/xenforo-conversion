@@ -53,7 +53,7 @@ It uses [Ruby-style regular expression syntax](http://ruby-doc.org/core-2.2.0/Re
 
 Here's an example call that replaces vBulletin-style YouTube video embeds with the Xenforo 1.5.x style:
 
-    bundle exec bin/find_and_replace '[video' '\[video=youtube\S*?;(\S+?)\].*?\[\/video\]' '[media=youtube]\1[/media]'
+    bundle exec bin/find_and_replace --yes '[video' '\[video=youtube\S*?;(\S+?)\].*?\[\/video\]' '[media=youtube]\1[/media]'
 
 That will find things like:
 
@@ -68,6 +68,12 @@ And turn them in to things like:
 Note the use of single quotes to ensure that shell expansion and substitutions don't eat your regular expressions. You can see the regular expression in use in this example [here](http://rubular.com/r/PNHAYTa65L).
 
 Because this script runs across _all_ the content in your `xf_posts` table it can take a _long_ time to run.
+
+#### Other Examples
+
+* [SoundCloud embeds](http://rubular.com/r/6zaWwlpS1L):
+
+    bundle exec bin/find_and_replace --yes '[soundcloud]' '\[soundcloud\]http(?:s)?:\/\/soundcloud\.com\/(.*?)\[\/soundcloud\]' '[media=soundcloud]\1[/media]'
 
 ## Development
 

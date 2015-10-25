@@ -75,6 +75,10 @@ Because this script runs across _all_ the content in your `xf_posts` table it ca
 
     bundle exec bin/find_and_replace --yes '[soundcloud]' '\[soundcloud\]http(?:s)?:\/\/soundcloud\.com\/(.*?)\[\/soundcloud\]' '[media=soundcloud]\1[/media]'
 
+* Streamed MP3 embeds:
+
+    bundle exec bin/find_and_replace --yes '[mp3]' '\[mp3\](.*?)\[\/mp3\]' '[media=audio]\1[/media]'
+
 ## Development
 
 ### Continuous Integration

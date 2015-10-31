@@ -10,7 +10,7 @@ options = {
   yes: false,
   table: :xf_post,
   field: :message,
-  index: :post_id,
+  index: :post_id
 }
 OptionParser.new do |opts|
   opts.banner = 'Usage: find_and_replace [--yes] <match> <regex> <replace>'
@@ -38,8 +38,8 @@ match = ARGV[0]
 regex = ARGV[1]
 replace = ARGV[2]
 
-logger.info "table   = #{options[:table].to_s}"
-logger.info "field   = #{options[:field].to_s}"
+logger.info "table   = #{options[:table]}"
+logger.info "field   = #{options[:field]}"
 logger.info "match   = #{match}"
 logger.info "regex   = #{regex}"
 logger.info "replace = #{replace}"
@@ -65,7 +65,7 @@ dataset.each do |row|
   info_message += "\n"
   logger.info info_message
   logger.info "Updating post #{post_id} with new text" if options[:yes]
-  dataset.where("#{options[:index].to_s} = ?", post_id).update("#{options[:field]}": new_message) if options[:yes]
+  dataset.where("#{options[:index]} = ?", post_id).update("#{options[:field]}": new_message) if options[:yes]
 end
 
 end_time = Time.now

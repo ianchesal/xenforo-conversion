@@ -69,6 +69,8 @@ Note the use of single quotes to ensure that shell expansion and substitutions d
 
 Because this script runs across _all_ the content in your `xf_posts` table it can take a _long_ time to run.
 
+You can use it to find and replace things across other tables, not just the `xf_post` table, by using the `--table`, `--index` and `--field` options. See the *Other Examples* section below for some other typical find-and-replace operations you can run with the script.
+
 #### Other Examples
 
 * [SoundCloud embeds](http://rubular.com/r/6zaWwlpS1L):
@@ -78,6 +80,10 @@ Because this script runs across _all_ the content in your `xf_posts` table it ca
 * Streamed MP3 embeds:
 
     bundle exec bin/find_and_replace --yes '[mp3]' '\[mp3\](.*?)\[\/mp3\]' '[media=audio]\1[/media]'
+
+* SoundCloud embeds in user signatures:
+
+    bundle exec bin/find_and_replace --table xf_user_profile --index user_id --field signature --yes '[soundcloud]' '\[soundcloud\]\s*http(?:s)?:\/\/soundcloud\.com\/(.*?)\[\/soundcloud\]' '[media=soundcloud]\1[/media]'
 
 ## Development
 

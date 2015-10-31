@@ -7,13 +7,28 @@ start_time = Time.now
 logger = Xenforo::XLogger.get_logger __FILE__
 
 options = {
-  yes: false
+  yes: false,
+  table: :xf_post,
+  field: :message,
+  index: :post_id,
 }
 OptionParser.new do |opts|
   opts.banner = 'Usage: find_and_replace [--yes] <match> <regex> <replace>'
 
   opts.on('-y', '--yes', 'Apply changes to database') do |v|
     options[:yes] = v
+  end
+
+  opts.on('--table [TABLE]', 'Search specific table (default: xf_post)') do |v|
+    options[:table] = v.to_sym
+  end
+
+  opts.on('--field [FIELD]', 'Search specific field in table (default: message)') do |v|
+    options[:field] = v.to_sym
+  end
+
+  opts.on('--index [INDEX]', 'Use specific index column (default: post_id)') do |v|
+    options[:index] = v.to_sym
   end
 end.parse!
 
@@ -23,6 +38,8 @@ match = ARGV[0]
 regex = ARGV[1]
 replace = ARGV[2]
 
+logger.info "table   = #{options[:table].to_s}"
+logger.info "field   = #{options[:field].to_s}"
 logger.info "match   = #{match}"
 logger.info "regex   = #{regex}"
 logger.info "replace = #{replace}"
@@ -35,20 +52,20 @@ DB = Xenforo::Database.new(
   logger: logger
 ).connect
 
-dataset = DB[:xf_post].select(:post_id, :message).where(Sequel.like(:message, "%#{match}%"))
+dataset = DB[options[:table]].select(options[:index], options[:field]).where(Sequel.like(options[:field], "%#{match}%"))
 logger.info "Matched #{dataset.count} records"
 dataset.each do |row|
-  post_id = row[:post_id]
+  post_id = row[options[:index]]
   info_message  = "\n"
-  info_message += "Post ID: #{post_id}\n"
-  new_message = row[:message].gsub(/#{regex}/, replace)
-  info_message += '> ' + row[:message].split("\n").join("\n> ")
+  info_message += "Index: #{post_id}\n"
+  new_message = row[options[:field]].gsub(/#{regex}/, replace)
+  info_message += '> ' + row[options[:field]].split("\n").join("\n> ")
   info_message += "\n--------------------\n"
   info_message += '< ' + new_message.split("\n").join("\n< ")
   info_message += "\n"
   logger.info info_message
-  logger.info "Updating post #{post_id} with new message" if options[:yes]
-  dataset.where('post_id = ?', post_id).update(message: new_message) if options[:yes]
+  logger.info "Updating post #{post_id} with new text" if options[:yes]
+  dataset.where("#{options[:index].to_s} = ?", post_id).update("#{options[:field]}": new_message) if options[:yes]
 end
 
 end_time = Time.now

@@ -4,6 +4,12 @@ AllCops:
 Style/Documentation:
   Enabled: false
 
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false
+
 MethodLength:
   Enabled: false
 

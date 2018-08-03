@@ -32,7 +32,7 @@ OptionParser.new do |opts|
   end
 end.parse!
 
-fail 'Missing required arguments <match> <regex> <replace>' if ARGV.count < 3
+raise 'Missing required arguments <match> <regex> <replace>' if ARGV.count < 3
 
 match = ARGV[0]
 regex = ARGV[1]

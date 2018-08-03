@@ -3,7 +3,7 @@ require 'xenforo/database'
 
 RSpec.describe 'Testing your database setup', fakefs: false do
   before(:example) do
-    fail 'Missing .config/database.yml file' unless File.exist? File.join(File.dirname(__FILE__), '..', '..', '..', '.config', 'database.yml')
+    raise 'Missing .config/database.yml file' unless File.exist? File.join(File.dirname(__FILE__), '..', '..', '..', '.config', 'database.yml')
   end
 
   let(:subject) { Xenforo::Database.new }

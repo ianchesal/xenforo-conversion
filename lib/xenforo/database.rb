@@ -61,10 +61,10 @@ module Xenforo
     end
 
     def load_yaml(type)
-      data = YAML.load(File.open(config_file))
-      fail "Missing #{type} section in database.yml" unless data.key? type
-      %w(host port username password type database).each do |setting|
-        fail "Missing database configuration setting #{setting}" unless data[type].key? setting
+      data = YAML.safe_load(File.open(config_file))
+      raise "Missing #{type} section in database.yml" unless data.key? type
+      %w[host port username password type database].each do |setting|
+        raise "Missing database configuration setting #{setting}" unless data[type].key? setting
       end
       self.type = type
       self.settings = data[type]

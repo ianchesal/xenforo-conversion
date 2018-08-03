@@ -1,6 +1,6 @@
 require 'fakefs/spec_helpers'
 require 'yaml'
-$LOAD_PATH.unshift File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift File.expand_path('lib', __dir__)
 
 RSpec::Expectations.configuration.warn_about_potential_false_positives = false
 RSpec.configure do |c|

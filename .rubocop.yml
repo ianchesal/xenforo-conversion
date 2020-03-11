@@ -16,11 +16,20 @@ MethodLength:
 LineLength:
   Max: 160
 
-AlignParameters:
+Layout/ParameterAlignment:
   Enabled: false
 
 SpaceAroundOperators:
   Enabled: false
 
 ClassLength:
+  Enabled: false
+
+Style/HashEachMethods:
+  Enabled: false
+
+Style/HashTransformKeys:
+  Enabled: false
+
+Style/HashTransformValues:
   Enabled: false

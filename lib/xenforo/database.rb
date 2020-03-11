@@ -29,6 +29,7 @@ module Xenforo
 
     def dbtype
       return 'mysql2' if settings['type'] == 'mysql'
+
       settings['type']
     end
 
@@ -63,6 +64,7 @@ module Xenforo
     def load_yaml(type)
       data = YAML.safe_load(File.open(config_file))
       raise "Missing #{type} section in database.yml" unless data.key? type
+
       %w[host port username password type database].each do |setting|
         raise "Missing database configuration setting #{setting}" unless data[type].key? setting
       end

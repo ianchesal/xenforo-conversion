@@ -1,5 +1,9 @@
 # xenforo-conversion
 
+> [!CAUTION]
+> This repo is archived now. It has not been worked on or maintained and you likely shouldn't rely on anything it contains
+> any more.
+
 [![Build Status](https://travis-ci.org/ianchesal/xenforo-conversion.svg?branch=master)](https://travis-ci.org/ianchesal/xenforo-conversion)
 
 Tools used for a vBulletin to Xenforo conversion. Data transforms, data cleanup, etc.
